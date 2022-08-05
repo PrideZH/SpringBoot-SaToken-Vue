@@ -1,0 +1,15 @@
+server:
+  servlet:
+    context-path: /api
+
+spring:
+  profiles:
+    active: dev # 当前使用环境
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+mybatis:
+  type-aliases-package: com.company.project.domain.po
+  configuration:
+    map-underscore-to-camel-case: true

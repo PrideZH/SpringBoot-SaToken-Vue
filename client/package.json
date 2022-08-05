@@ -1,0 +1,31 @@
+{
+  "name": "inote-admin",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "cross-env vite --mode development",
+    "product": "cross-env vite --mode production",
+    "build": "vue-tsc --noEmit && vite build",
+    "build:dev": "cross-env vite build --mode development",
+    "build:product": "cross-env vite build --mode production",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^0.2.6",
+    "axios": "^0.25.0",
+    "echarts": "^5.2.2",
+    "element-plus": "^1.3.0-beta.7",
+    "pinia": "^2.0.10",
+    "vue": "^3.2.25",
+    "vue-router": "^4.0.12"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.10",
+    "@vitejs/plugin-vue": "^2.0.0",
+    "cross-env": "^7.0.3",
+    "typescript": "^4.4.4",
+    "unplugin-auto-import": "^0.5.11",
+    "unplugin-vue-components": "^0.17.14",
+    "vite": "^2.7.2",
+    "vue-tsc": "^0.29.8"
+  }
+}
