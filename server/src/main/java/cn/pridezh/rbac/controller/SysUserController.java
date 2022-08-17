@@ -1,17 +1,13 @@
 package cn.pridezh.rbac.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import cn.pridezh.rbac.convert.SysUserConvert;
 import cn.pridezh.rbac.domain.common.Result;
 import cn.pridezh.rbac.domain.dto.PageDTO;
 import cn.pridezh.rbac.domain.dto.SysUserCreateDTO;
 import cn.pridezh.rbac.domain.dto.SysUserUpdateDTO;
-import cn.pridezh.rbac.domain.po.SysUser;
 import cn.pridezh.rbac.domain.vo.user.SysUserItemVO;
-import cn.pridezh.rbac.domain.vo.user.SysUserVO;
 import cn.pridezh.rbac.service.SysUserService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;

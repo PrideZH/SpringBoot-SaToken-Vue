@@ -50,12 +50,13 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper, SysRole> {
         sysRoleMapper.insert(sysRole);
 
         if (CollUtil.isNotEmpty(sysRoleCreateDTO.getPermissionIds())) {
-            sysRoleCreateDTO.getPermissionIds().forEach(permissionId -> {
+            List<SysRolePermission> sysRolePermissions = sysRoleCreateDTO.getPermissionIds().stream().map(permissionId -> {
                 SysRolePermission sysRolePermission = new SysRolePermission();
                 sysRolePermission.setRoleId(sysRole.getId());
                 sysRolePermission.setPermissionId(permissionId);
-                sysRolePermissionMapper.insert(sysRolePermission);
-            });
+                return sysRolePermission;
+            }).toList();
+            sysRolePermissionMapper.insertBatchSomeColumn(sysRolePermissions);
         }
     }
 
@@ -92,12 +93,13 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper, SysRole> {
             sysRolePermissionMapper.delete(new LambdaQueryWrapper<SysRolePermission>()
                     .eq(SysRolePermission::getRoleId, sysRoleUpdateDTO.getId()));
             // 添加新权限
-            sysRoleUpdateDTO.getPermissionIds().forEach(permissionId -> {
+            List<SysRolePermission> sysRolePermissions = sysRoleUpdateDTO.getPermissionIds().stream().map(permissionId -> {
                 SysRolePermission sysRolePermission = new SysRolePermission();
                 sysRolePermission.setRoleId(sysRoleUpdateDTO.getId());
                 sysRolePermission.setPermissionId(permissionId);
-                sysRolePermissionMapper.insert(sysRolePermission);
-            });
+                return sysRolePermission;
+            }).toList();
+            sysRolePermissionMapper.insertBatchSomeColumn(sysRolePermissions);
         }
     }
 

@@ -1,12 +1,14 @@
 package cn.pridezh.rbac.exception;
 
 import cn.pridezh.rbac.domain.common.ResultCode;
+import lombok.Getter;
 
 /**
  * 业务异常
  * @author PrideZH
  * @since 2022/8/3 19:06
  */
+@Getter
 public class ServiceException extends RuntimeException {
 
     private final int code;
@@ -34,14 +36,6 @@ public class ServiceException extends RuntimeException {
 
         this.code = resultCode.code();
         this.message = message;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
     }
 
 }

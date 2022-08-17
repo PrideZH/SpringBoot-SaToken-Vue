@@ -43,7 +43,7 @@ public class ArticleController {
     @GetMapping("/page")
     public Result<IPage<ArticleItemVO>> listByPage(@Validated PageDTO pageDTO) {
         Page<Article> page = articleService.page(new Page<>(pageDTO.getPage(), pageDTO.getSize()));
-        return Result.success(ArticleConvert.INSTANCE.toVOPage(page));
+        return Result.success(page.convert(ArticleConvert.INSTANCE::toItemVO));
     }
 
     @ApiOperation(value = "修改文章")

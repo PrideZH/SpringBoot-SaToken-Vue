@@ -1,13 +1,8 @@
 package cn.pridezh.rbac.convert;
 
 import cn.pridezh.rbac.domain.po.Article;
-import cn.pridezh.rbac.domain.po.SysRole;
 import cn.pridezh.rbac.domain.vo.ArticleItemVO;
-import cn.pridezh.rbac.domain.vo.role.SysRoleItemVO;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -21,9 +16,8 @@ public interface ArticleConvert {
 
     ArticleConvert INSTANCE = Mappers.getMapper(ArticleConvert.class);
 
-    List<ArticleItemVO> toItemVOList(List<Article> articles);
+    ArticleItemVO toItemVO(Article article);
 
-    @Mapping(target = "records", expression = "java( ArticleConvert.INSTANCE.toItemVOList( page.getRecords() ) )")
-    Page<ArticleItemVO> toVOPage(IPage<Article> page);
+    List<ArticleItemVO> toItemVOList(List<Article> articles);
 
 }

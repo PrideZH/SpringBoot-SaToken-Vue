@@ -23,4 +23,12 @@ public class MybatisPlusConfig {
         return interceptor;
     }
 
+    /**
+     * SQL 注入器
+     */
+    @Bean
+    public EasySqlInjector easySqlInjector () {
+        return new EasySqlInjector();
+    }
+
 }

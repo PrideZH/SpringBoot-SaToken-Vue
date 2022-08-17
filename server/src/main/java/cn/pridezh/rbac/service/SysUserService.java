@@ -48,12 +48,13 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
         sysUserMapper.insert(sysUser);
 
         if (CollUtil.isNotEmpty(sysUserCreateDTO.getRoleIds())) {
-            sysUserCreateDTO.getRoleIds().forEach(roleId -> {
+            List<SysUserRole> sysUserRoles = sysUserCreateDTO.getRoleIds().stream().map(roleId -> {
                 SysUserRole sysUserRole = new SysUserRole();
                 sysUserRole.setUserId(sysUser.getId());
                 sysUserRole.setRoleId(roleId);
-                sysUserRoleMapper.insert(sysUserRole);
-            });
+                return sysUserRole;
+            }).toList();
+            sysUserRoleMapper.insertBatchSomeColumn(sysUserRoles);
         }
     }
 
@@ -96,12 +97,13 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
             sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>()
                     .eq(SysUserRole::getUserId, sysUserUpdateDTO.getId()));
             // 添加新角色
-            sysUserUpdateDTO.getRoleIds().forEach(roleId -> {
+            List<SysUserRole> sysUserRoles = sysUserUpdateDTO.getRoleIds().stream().map(roleId -> {
                 SysUserRole sysUserRole = new SysUserRole();
                 sysUserRole.setUserId(sysUserUpdateDTO.getId());
                 sysUserRole.setRoleId(roleId);
-                sysUserRoleMapper.insert(sysUserRole);
-            });
+                return sysUserRole;
+            }).toList();
+            sysUserRoleMapper.insertBatchSomeColumn(sysUserRoles);
         }
     }
 
