@@ -1,9 +1,7 @@
 package cn.pridezh.rbac.config;
 
-import cn.dev33.satoken.interceptor.SaAnnotationInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -22,13 +20,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowCredentials(true) // 是否允许证书 (cookies)
                 .allowedMethods("*") // 允许方法
                 .maxAge(3600); // 允许跨域时间
-    }
-
-    // 打开注解式鉴权功能
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        // 注册注解拦截器，并排除不需要注解鉴权的接口地址 (与登录拦截器无关)
-        registry.addInterceptor(new SaAnnotationInterceptor()).addPathPatterns("/**");
     }
 
     @Override

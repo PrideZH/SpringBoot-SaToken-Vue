@@ -62,21 +62,24 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper, SysRole> {
     public IPage<SysRoleItemVO> page(PageDTO pageDTO) {
         Page<SysRole> page = sysRoleMapper.selectPage(new Page<>(pageDTO.getPage(), pageDTO.getSize()), null);
 
-        Page<SysRoleItemVO> sysRoleItemVOPage = SysRoleConvert.INSTANCE.toVOPage(page);
-        sysRoleItemVOPage.setRecords(sysRoleItemVOPage.getRecords().stream().peek(sysRoleItemVO -> {
+        return page.convert(sysRole -> {
+            SysRoleItemVO sysRoleItemVO = SysRoleConvert.INSTANCE.toItemVO(sysRole);
+
+            // 设置角色拥有的权限
             List<Long> permissionIds = sysRolePermissionMapper.selectList(new LambdaQueryWrapper<SysRolePermission>()
                             .select(SysRolePermission::getPermissionId)
                             .eq(SysRolePermission::getRoleId, sysRoleItemVO.getId()))
                     .stream().map(SysRolePermission::getPermissionId).toList();
+
             if (CollUtil.isEmpty(permissionIds)) {
                 sysRoleItemVO.setPermissions(Collections.emptyList());
-                return;
+            } else {
+                List<SysPermission> sysPermissions = sysPermissionMapper.selectBatchIds(permissionIds);
+                sysRoleItemVO.setPermissions(SysPermissionConvert.INSTANCE.toVOList(sysPermissions));
             }
-            List<SysPermission> sysPermissions = sysPermissionMapper.selectBatchIds(permissionIds);
-            sysRoleItemVO.setPermissions(SysPermissionConvert.INSTANCE.toVOList(sysPermissions));
-        }).toList());
 
-        return sysRoleItemVOPage;
+            return sysRoleItemVO;
+        });
     }
 
     @Transactional(rollbackFor = Exception.class)

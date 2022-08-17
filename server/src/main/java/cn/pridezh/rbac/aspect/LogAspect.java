@@ -46,7 +46,7 @@ public class LogAspect {
         // 请求入参
         String requestParam = Arrays.toString(joinPoint.getArgs());
 
-        log.info("\n    [Controller start], {}, methodName->{}, IP->{}, requestParam->{}",
+        log.info("\n[CONT S],{},method->{},IP->{},param->{}",
                 controllerTitle, methodName, iP,
                 StringUtils.abbreviate(requestParam, 512));
 
@@ -54,7 +54,7 @@ public class LogAspect {
 
         Object result = joinPoint.proceed();
 
-        log.info("\n    [Controller end], {}, 耗时->{}ms, result->{}",
+        log.info("\n[CONT E],{},time->{}ms,result->{}",
                 controllerTitle, System.currentTimeMillis() - startTime,
                 StringUtils.abbreviate(result.toString(), 512));
         return result;

@@ -5,11 +5,7 @@ import cn.pridezh.rbac.domain.dto.SysUserUpdateDTO;
 import cn.pridezh.rbac.domain.po.SysUser;
 import cn.pridezh.rbac.domain.vo.user.SysUserInfoVO;
 import cn.pridezh.rbac.domain.vo.user.SysUserItemVO;
-import cn.pridezh.rbac.domain.vo.user.SysUserVO;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -29,11 +25,8 @@ public interface SysUserConvert {
 
     SysUserInfoVO toVO(SysUser sysUser);
 
-    List<SysUserVO> toVOList(List<SysUser> sysUsers);
+    SysUserItemVO toItemVO(SysUser sysUser);
 
     List<SysUserItemVO> toItemVOList(List<SysUser> sysUsers);
-
-    @Mapping(target = "records", expression = "java( SysUserConvert.INSTANCE.toItemVOList( page.getRecords() ) )")
-    Page<SysUserItemVO> toVOPage(IPage<SysUser> page);
 
 }

@@ -22,7 +22,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -61,22 +60,25 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
     public IPage<SysUserItemVO> page(PageDTO pageDTO) {
         Page<SysUser> page = sysUserMapper.selectPage(new Page<>(pageDTO.getPage(), pageDTO.getSize()), null);
 
-        Page<SysUserItemVO> sysUserItemVOPage = SysUserConvert.INSTANCE.toVOPage(page);
+        return page.convert(sysUser -> {
+            SysUserItemVO sysUserItemVO = SysUserConvert.INSTANCE.toItemVO(sysUser);
 
-        sysUserItemVOPage.setRecords(sysUserItemVOPage.getRecords().stream().peek(sysUserItemVO -> {
+            // 设置用户拥有的角色
             List<Long> roleIds = sysUserRoleMapper.selectList(new LambdaQueryWrapper<SysUserRole>()
                             .select(SysUserRole::getRoleId)
                             .eq(SysUserRole::getUserId, sysUserItemVO.getId()))
                     .stream().map(SysUserRole::getRoleId).toList();
+
             if (CollUtil.isEmpty(roleIds)) {
                 sysUserItemVO.setRoles(Collections.emptyList());
-                return;
+                return sysUserItemVO;
+            } else {
+                List<SysRole> sysRoles = sysRoleMapper.selectBatchIds(roleIds);
+                sysUserItemVO.setRoles(SysRoleConvert.INSTANCE.toVOList(sysRoles));
             }
-            List<SysRole> sysRoles = sysRoleMapper.selectBatchIds(roleIds);
-            sysUserItemVO.setRoles(SysRoleConvert.INSTANCE.toVOList(sysRoles));
-        }).toList());
 
-        return sysUserItemVOPage;
+            return sysUserItemVO;
+        });
     }
 
     @Transactional(rollbackFor = Exception.class)
