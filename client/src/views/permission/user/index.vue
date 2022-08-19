@@ -96,40 +96,39 @@ onMounted(() => {
   </el-card> -->
   <el-card>
     <div class="table-operate">
-      <el-button v-if="hasPerm('sys:user:add')" type="success" @click="showCreate">添加</el-button>
+      <el-button v-if="hasPerm('sys:user:add')" type="success" @click="showCreate">{{ $t('common.add') }}</el-button>
     </div>
     <el-table :data="users?.records" size="small">
       <el-table-column prop="nickname" label="昵称" align="center" />
       <el-table-column prop="username" label="用户名" align="center" />
       <el-table-column label="角色" align="center">
         <template #default="scope">
-          <el-space>
+          <el-space wrap>
             <el-tag v-if="scope.row.superAdmin" type="warning">超级管理员</el-tag>
             <template v-else>
-              <el-tag v-for="role in scope.row.roles" type="primary">{{ role.name }}</el-tag>
+              <el-tag v-for="role in scope.row.roles">{{ role.name }}</el-tag>
             </template>
           </el-space>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" align="center" />
-      <el-table-column prop="updateTime" label="修改时间" align="center" />
-      <el-table-column fixed="right" label="操作" align="center">
+      <el-table-column prop="createTime" label="创建时间" align="center" width="140"/>
+      <el-table-column prop="updateTime" label="修改时间" align="center" width="140"/>
+      <el-table-column fixed="right" label="操作" align="center" width="128">
         <template #default="scope">
-          <el-button v-if="!scope.row.superAdmin && hasPerm('sys:user:put')" type="primary" size="small" @click="showUpdate(scope.row)">修改</el-button>
-          <el-popconfirm title="是否确定删除?" @confirm="deleteUser(scope.row.id)">
+          <el-button v-if="!scope.row.superAdmin && hasPerm('sys:user:put')" type="primary" size="small" @click="showUpdate(scope.row)">{{ $t('common.edit') }}</el-button>
+          <el-popconfirm v-if="!scope.row.superAdmin && hasPerm('sys:user:del')" title="是否确定删除?" @confirm="deleteUser(scope.row.id)">
             <template #reference>
-              <el-button v-if="!scope.row.superAdmin && hasPerm('sys:user:del')" type="danger" size="small" >删除</el-button>
+              <el-button type="danger" size="small" >{{ $t('common.delete') }}</el-button>
             </template>
           </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
     <el-pagination
-      v-model:currentPage="currentPage"
+      v-model:current-page="currentPage"
       :page-size="pageSize"
-      :total="users?.total"
-    >
-    </el-pagination>
+      :total="users?.total || 0"
+    />
   </el-card>
 
   <el-dialog v-model="dialogVisible" :title="dialogStatus === 'create' ? '创建用户' : '编辑'">

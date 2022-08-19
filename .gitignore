@@ -25,4 +25,4 @@ dist-ssr
 
 # Intellij
 /.idea/
-/target/
+server/target/

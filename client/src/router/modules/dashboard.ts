@@ -3,7 +3,7 @@ export default {
   name: 'dashboard',
   component: () => import('@/views/dashboard/index.vue'),
   meta: {
-    locale: '仪表板', // menu.dashboard
+    locale: 'menu.dashboard',
     requireAuth: true,
     icon: [
       'M512 896a384 384 0 100-768 384 384 0 000 768zm0 64a448 448 0 110-896 448 448 0 010 896z',

@@ -89,34 +89,34 @@ onMounted(() => {
   </el-card> -->
   <el-card>
     <div class="table-operate">
-      <el-button v-if="hasPerm('sys:role:add')" type="success" @click="showCreate">添加</el-button>
+      <el-button v-if="hasPerm('sys:role:add')" type="success" @click="showCreate">{{ $t('common.add') }}</el-button>
     </div>
     <el-table :data="roles?.records" size="small">
       <el-table-column prop="name" label="名称" align="center" />
       <el-table-column prop="permission" label="权限" align="center">
         <template #default="scope">
-          <el-space>
+          <el-space wrap>
             <el-tag v-for="permission in scope.row.permissions">{{ permission.name }}</el-tag>
           </el-space>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" align="center" />
-      <el-table-column prop="updateTime" label="修改时间" align="center" />
-      <el-table-column fixed="right" label="操作" align="center">
+      <el-table-column prop="createTime" label="创建时间" align="center" width="140"/>
+      <el-table-column prop="updateTime" label="修改时间" align="center" width="140"/>
+      <el-table-column fixed="right" label="操作" align="center" width="128">
         <template #default="scope">
-          <el-button v-if="hasPerm('sys:role:put')" type="primary" size="small" @click="showUpdate(scope.row)">修改</el-button>
+          <el-button v-if="hasPerm('sys:role:put')" type="primary" size="small" @click="showUpdate(scope.row)">{{ $t('common.edit') }}</el-button>
           <el-popconfirm title="是否确定删除?" @confirm="deleteRole(scope.row.id)">
             <template #reference>
-              <el-button v-if="hasPerm('sys:role:del')" type="danger" size="small" >删除</el-button>
+              <el-button v-if="hasPerm('sys:role:del')" type="danger" size="small" >{{ $t('common.delete') }}</el-button>
             </template>
           </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
     <el-pagination
-      v-model:currentPage="currentPage"
+      v-model:current-page="currentPage"
       :page-size="pageSize"
-      :total="roles?.total"
+      :total="roles?.total || 0"
     >
     </el-pagination>
   </el-card>

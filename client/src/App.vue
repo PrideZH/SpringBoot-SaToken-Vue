@@ -1,25 +1,24 @@
 <script setup lang="ts">
-import zhCn from 'element-plus/lib/locale/lang/zh-cn';
 import { ElConfigProvider } from 'element-plus';
-import { ref } from 'vue';
+import { useAppStore } from './store';
 
-const locale = ref(zhCn);
+const appStore = useAppStore();
 </script>
 
 <template>
-  <el-config-provider :locale="locale">
+  <el-config-provider :locale="appStore.locale">
     <router-view />
   </el-config-provider>
 </template>
 
 <style>
-body {
+* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
 
 body, #app {
-  height: 100vh;
+  height: 100%;
 }
 </style>

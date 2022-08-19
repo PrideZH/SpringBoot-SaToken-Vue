@@ -3,7 +3,7 @@ export default {
   name: 'article',
   component: () => import('@/views/article/index.vue'),
   meta: {
-    locale: '文章管理', // menu.article
+    locale: 'menu.article',
     requireAuth: true,
     permissions: [ 'article:get' ],
     icon: [

@@ -4,19 +4,15 @@ import IconBtn from '@/components/IconBtn.vue';
 import router from '@/router';
 import { useAppStore, useUserStore } from '@/store';
 import { Expand, Fold, Location, SwitchButton } from '@element-plus/icons-vue';
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
+const appStore = useAppStore();
 const userStore = useUserStore();
 
 const userInfo = ref<UserInfoResp | null>(null);
 
-const name = ref<string>('Dashboard');
-
-const appStore = useAppStore();
-const isCollapse = computed(() => appStore.isCollapse);
-
 const toggleCollapse = (): void => {
-  appStore.updateSettings({isCollapse: !isCollapse.value});
+  appStore.isCollapse = !appStore.isCollapse;
 };
 
 const logout = () => {
@@ -37,19 +33,19 @@ onMounted(async () => {
     <div class="left">
       <IconBtn style="height: 40px;" @click="toggleCollapse">
         <el-icon :size="24">
-          <Expand v-if="isCollapse" />
+          <Expand v-if="appStore.isCollapse" />
           <Fold v-else />
         </el-icon>
       </IconBtn>
-      <span>{{ name }}</span>
+      <span>{{ $t(router.currentRoute.value.meta.locale as string || 'default') }}</span>
     </div>
     <div class="right">
       <el-dropdown trigger="click">
         <IconBtn style="height: 40px;"><el-icon><Location /></el-icon></IconBtn>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item>简体中文</el-dropdown-item>
-            <el-dropdown-item>English</el-dropdown-item>
+            <el-dropdown-item @click="appStore.setLang('zhCn')">简体中文</el-dropdown-item>
+            <el-dropdown-item @click="appStore.setLang('enUs')">English</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>

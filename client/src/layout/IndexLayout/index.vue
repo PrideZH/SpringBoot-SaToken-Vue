@@ -35,20 +35,20 @@ const menuWidth = computed(() => {
               <el-icon v-if="subMenu.meta?.icon"><svg viewBox="0 0 1024 1024" >
                 <path v-for="(iconSvg, index) in subMenu.meta?.icon" :key="index" fill="currentColor" :d="iconSvg"></path>
               </svg></el-icon>
-              <span>{{ subMenu.meta?.locale }}</span>
+              <span>{{ $t(subMenu.meta?.locale as string) }}</span>
             </template>
             <el-menu-item v-for="menuItem in subMenu.children" :key="menuItem.path" :index="`/${subMenu.path}/${menuItem.path}`">
               <el-icon v-if="menuItem.meta?.icon"><svg viewBox="0 0 1024 1024" >
                 <path v-for="(iconSvg, index) in menuItem.meta?.icon" :key="index" fill="currentColor" :d="iconSvg"></path>
               </svg></el-icon>
-              <span>{{ menuItem.meta?.locale }}</span>
+              <span>{{ $t(subMenu.meta?.locale as string) }}</span>
             </el-menu-item>
           </el-sub-menu>
           <el-menu-item v-else :index="`/${subMenu.path}`">
             <el-icon v-if="subMenu.meta?.icon"><svg viewBox="0 0 1024 1024" >
               <path v-for="(iconSvg, index) in subMenu.meta?.icon" :key="index" fill="currentColor" :d="iconSvg"></path>
             </svg></el-icon>
-            <span>{{ subMenu.meta?.locale }}</span>
+            <span>{{ $t(subMenu.meta?.locale as string) }}</span>
           </el-menu-item>
         </template>
       </el-menu>
@@ -91,6 +91,10 @@ const menuWidth = computed(() => {
   -ms-overflow-style: none;
   overflow: -moz-scrollbars-none;
   transition: width 0.5s;
+}
+
+.content {
+  min-width: 512px;
 }
 
 .header {
