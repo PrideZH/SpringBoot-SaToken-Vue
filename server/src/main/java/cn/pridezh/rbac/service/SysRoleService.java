@@ -50,12 +50,11 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper, SysRole> {
         sysRoleMapper.insert(sysRole);
 
         if (CollUtil.isNotEmpty(sysRoleCreateDTO.getPermissionIds())) {
-            List<SysRolePermission> sysRolePermissions = sysRoleCreateDTO.getPermissionIds().stream().map(permissionId -> {
-                SysRolePermission sysRolePermission = new SysRolePermission();
-                sysRolePermission.setRoleId(sysRole.getId());
-                sysRolePermission.setPermissionId(permissionId);
-                return sysRolePermission;
-            }).toList();
+            List<SysRolePermission> sysRolePermissions = sysRoleCreateDTO.getPermissionIds().stream()
+                    .map(permissionId -> new SysRolePermission()
+                            .setRoleId(sysRole.getId())
+                            .setPermissionId(permissionId))
+                    .toList();
             sysRolePermissionMapper.insertBatchSomeColumn(sysRolePermissions);
         }
     }
@@ -93,12 +92,11 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper, SysRole> {
             sysRolePermissionMapper.delete(new LambdaQueryWrapper<SysRolePermission>()
                     .eq(SysRolePermission::getRoleId, sysRoleUpdateDTO.getId()));
             // 添加新权限
-            List<SysRolePermission> sysRolePermissions = sysRoleUpdateDTO.getPermissionIds().stream().map(permissionId -> {
-                SysRolePermission sysRolePermission = new SysRolePermission();
-                sysRolePermission.setRoleId(sysRoleUpdateDTO.getId());
-                sysRolePermission.setPermissionId(permissionId);
-                return sysRolePermission;
-            }).toList();
+            List<SysRolePermission> sysRolePermissions = sysRoleUpdateDTO.getPermissionIds().stream()
+                    .map(permissionId -> new SysRolePermission()
+                            .setRoleId(sysRoleUpdateDTO.getId())
+                            .setPermissionId(permissionId))
+                    .toList();
             sysRolePermissionMapper.insertBatchSomeColumn(sysRolePermissions);
         }
     }
