@@ -27,4 +27,7 @@ public class SysUserUpdateDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private List<Long> roleIds;
 
+    @ApiModelProperty(value = "头像URL")
+    private String avatarUrl;
+
 }

@@ -10,11 +10,11 @@ import java.util.List;
  * @author PrideZH
  * @since 2022/8/5 14:29
  */
-@Mapper(componentModel = "spring")
-public interface ArticleConvert {
+@Mapper(componentModel = "spring", unmappedTargetPolicy = org.mapstruct.ReportingPolicy.IGNORE)
+public abstract class ArticleConvert {
 
-    ArticleItemVO toItemVO(Article article);
+    public abstract ArticleItemVO toItemVO(Article article);
 
-    List<ArticleItemVO> toItemVOList(List<Article> articles);
+    public abstract List<ArticleItemVO> toItemVOList(List<Article> articles);
 
 }

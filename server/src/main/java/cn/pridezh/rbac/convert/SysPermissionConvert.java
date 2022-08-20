@@ -10,9 +10,9 @@ import java.util.List;
  * @author PrideZH
  * @since 2022/8/4 22:05
  */
-@Mapper(componentModel = "spring")
-public interface SysPermissionConvert {
+@Mapper(componentModel = "spring", unmappedTargetPolicy = org.mapstruct.ReportingPolicy.IGNORE)
+public abstract class SysPermissionConvert {
 
-    List<SysPermissionVO> toVOList(List<SysPermission> sysPermissions);
+    public abstract List<SysPermissionVO> toVOList(List<SysPermission> sysPermissions);
 
 }

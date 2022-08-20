@@ -13,15 +13,15 @@ import java.util.List;
  * @author PrideZH
  * @since 2022/8/3 21:10
  */
-@Mapper(componentModel = "spring")
-public interface SysRoleConvert {
+@Mapper(componentModel = "spring", unmappedTargetPolicy = org.mapstruct.ReportingPolicy.IGNORE)
+public abstract class SysRoleConvert {
 
-    SysRole toPO(SysRoleCreateDTO sysRoleCreateDTO);
+    public abstract SysRole toPO(SysRoleCreateDTO sysRoleCreateDTO);
 
-    SysRole toPO(SysRoleUpdateDTO sysRoleUpdateDTO);
+    public abstract SysRole toPO(SysRoleUpdateDTO sysRoleUpdateDTO);
 
-    List<SysRoleVO> toVOList(List<SysRole> sysRoles);
+    public abstract List<SysRoleVO> toVOList(List<SysRole> sysRoles);
 
-    SysRoleItemVO toItemVO(SysRole sysRole);
+    public abstract SysRoleItemVO toItemVO(SysRole sysRole);
 
 }

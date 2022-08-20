@@ -24,6 +24,8 @@ public class SysUser extends BasePO {
 
     private String nickname;
 
+    private String avatarUrl;
+
     private Boolean superAdmin;
 
 }

@@ -26,6 +26,9 @@ public class SysUserItemVO extends BaseVO {
     @ApiModelProperty(value = "昵称")
     private String nickname;
 
+    @ApiModelProperty(value = "头像URL")
+    private String avatarUrl;
+
     @ApiModelProperty(value = "是否是超级管理员")
     private Boolean superAdmin;
 
