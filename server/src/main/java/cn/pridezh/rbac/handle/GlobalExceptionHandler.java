@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -57,6 +58,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Result<Void> handlerHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         return Result.fail().setMessage("JSON 格式错误");
+    }
+
+    /**
+     * 请求 Content Type 错误
+     */
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public Result<Void> handlerHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
+        return Result.fail().setMessage(e.getMessage());
     }
 
     /**

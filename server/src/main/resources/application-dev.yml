@@ -33,6 +33,12 @@ spring:
         # 连接池中的最小空闲连接
         min-idle: 0
 
+minio:
+  url: http://127.0.0.1:9000 # 服务地址
+  access: minioadmin # 账号
+  secret: minioadmin # 密码
+  bucket: pridezh-bucket # Bucket
+
 # 开启打印日志信息
 mybatis-plus:
   configuration:
