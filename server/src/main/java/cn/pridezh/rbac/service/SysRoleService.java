@@ -40,13 +40,16 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper, SysRole> {
     private SysPermissionMapper sysPermissionMapper;
     private SysRolePermissionMapper sysRolePermissionMapper;
 
+    private SysRoleConvert sysRoleConvert;
+    private SysPermissionConvert sysPermissionConvert;
+
     @Transactional(rollbackFor = Exception.class)
     public void create(SysRoleCreateDTO sysRoleCreateDTO) {
         if (sysRoleMapper.selectOne(new LambdaQueryWrapper<SysRole>()
                 .eq(SysRole::getName, sysRoleCreateDTO.getName())) != null) {
             throw new ServiceException(1001, "角色已存在");
         }
-        SysRole sysRole = SysRoleConvert.INSTANCE.toPO(sysRoleCreateDTO);
+        SysRole sysRole = sysRoleConvert.toPO(sysRoleCreateDTO);
         sysRoleMapper.insert(sysRole);
 
         if (CollUtil.isNotEmpty(sysRoleCreateDTO.getPermissionIds())) {
@@ -63,7 +66,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper, SysRole> {
         Page<SysRole> page = sysRoleMapper.selectPage(new Page<>(pageDTO.getPage(), pageDTO.getSize()), null);
 
         return page.convert(sysRole -> {
-            SysRoleItemVO sysRoleItemVO = SysRoleConvert.INSTANCE.toItemVO(sysRole);
+            SysRoleItemVO sysRoleItemVO = sysRoleConvert.toItemVO(sysRole);
 
             // 设置角色拥有的权限
             List<Long> permissionIds = sysRolePermissionMapper.selectList(new LambdaQueryWrapper<SysRolePermission>()
@@ -75,7 +78,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper, SysRole> {
                 sysRoleItemVO.setPermissions(Collections.emptyList());
             } else {
                 List<SysPermission> sysPermissions = sysPermissionMapper.selectBatchIds(permissionIds);
-                sysRoleItemVO.setPermissions(SysPermissionConvert.INSTANCE.toVOList(sysPermissions));
+                sysRoleItemVO.setPermissions(sysPermissionConvert.toVOList(sysPermissions));
             }
 
             return sysRoleItemVO;
@@ -84,7 +87,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper, SysRole> {
 
     @Transactional(rollbackFor = Exception.class)
     public void update(SysRoleUpdateDTO sysRoleUpdateDTO) {
-        sysRoleMapper.updateById(SysRoleConvert.INSTANCE.toPO(sysRoleUpdateDTO));
+        sysRoleMapper.updateById(sysRoleConvert.toPO(sysRoleUpdateDTO));
 
         // 修改角色的权限
         if (CollUtil.isNotEmpty(sysRoleUpdateDTO.getPermissionIds())) {

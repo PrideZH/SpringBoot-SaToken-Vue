@@ -37,13 +37,16 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
     private SysRoleMapper sysRoleMapper;
     private SysUserRoleMapper sysUserRoleMapper;
 
+    private SysUserConvert sysUserConvert;
+    private SysRoleConvert sysRoleConvert;
+
     @Transactional(rollbackFor = Exception.class)
     public void create(SysUserCreateDTO sysUserCreateDTO) {
         if (sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>()
                 .eq(SysUser::getUsername, sysUserCreateDTO.getUsername())) != null) {
             throw new ServiceException(1001, "用户名已存在");
         }
-        SysUser sysUser = SysUserConvert.INSTANCE.toPO(sysUserCreateDTO);
+        SysUser sysUser = sysUserConvert.toPO(sysUserCreateDTO);
         sysUser.setPassword(SaSecureUtil.sha256(sysUser.getPassword()));
         sysUserMapper.insert(sysUser);
 
@@ -61,7 +64,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
         Page<SysUser> page = sysUserMapper.selectPage(new Page<>(pageDTO.getPage(), pageDTO.getSize()), null);
 
         return page.convert(sysUser -> {
-            SysUserItemVO sysUserItemVO = SysUserConvert.INSTANCE.toItemVO(sysUser);
+            SysUserItemVO sysUserItemVO = sysUserConvert.toItemVO(sysUser);
 
             // 设置用户拥有的角色
             List<Long> roleIds = sysUserRoleMapper.selectList(new LambdaQueryWrapper<SysUserRole>()
@@ -74,7 +77,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
                 return sysUserItemVO;
             } else {
                 List<SysRole> sysRoles = sysRoleMapper.selectBatchIds(roleIds);
-                sysUserItemVO.setRoles(SysRoleConvert.INSTANCE.toVOList(sysRoles));
+                sysUserItemVO.setRoles(sysRoleConvert.toVOList(sysRoles));
             }
 
             return sysUserItemVO;
@@ -88,7 +91,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
             throw new ServiceException(1001, "不能修改超级管理员");
         }
 
-        sysUserMapper.updateById(SysUserConvert.INSTANCE.toPO(sysUserUpdateDTO));
+        sysUserMapper.updateById(sysUserConvert.toPO(sysUserUpdateDTO));
 
         // 修改用户的角色
         if (CollUtil.isNotEmpty(sysUserUpdateDTO.getRoleIds())) {

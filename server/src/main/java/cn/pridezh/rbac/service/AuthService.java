@@ -36,6 +36,8 @@ public class AuthService {
     private SysUserRoleMapper sysUserRoleMapper;
     private SysRolePermissionMapper sysRolePermissionMapper;
 
+    private SysUserConvert sysUserConvert;
+
     public TokenVO login(LoginDTO loginDTO) {
         SysUser sysAdmin = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>()
                 .eq(SysUser::getUsername, loginDTO.getUsername()));
@@ -58,7 +60,7 @@ public class AuthService {
     public SysUserInfoVO info() {
         Long userId = StpUtil.getLoginIdAsLong();
         SysUser sysUser = sysUserMapper.selectById(userId);
-        SysUserInfoVO sysUserInfoVO = SysUserConvert.INSTANCE.toVO(sysUser);
+        SysUserInfoVO sysUserInfoVO = sysUserConvert.toVO(sysUser);
 
         sysUserInfoVO.setPermissions(access());
 

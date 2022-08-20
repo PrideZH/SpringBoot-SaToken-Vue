@@ -30,6 +30,8 @@ public class SysRoleController {
 
     private SysRoleService sysRoleService;
 
+    private SysRoleConvert sysRoleConvert;
+
     @ApiOperation(value = "创建角色")
     @ApiResponses({
             @ApiResponse(code = 1001, message = "角色已存在")
@@ -63,7 +65,7 @@ public class SysRoleController {
     @SaCheckPermission("sys:role:get")
     @GetMapping("")
     public Result<List<SysRoleVO>> list() {
-        return Result.success(SysRoleConvert.INSTANCE.toVOList(sysRoleService.list()));
+        return Result.success(sysRoleConvert.toVOList(sysRoleService.list()));
     }
 
     @ApiOperation(value = "删除角色")

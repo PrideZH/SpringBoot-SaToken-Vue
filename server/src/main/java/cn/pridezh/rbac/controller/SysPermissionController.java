@@ -26,11 +26,13 @@ public class SysPermissionController {
 
     private SysPermissionService sysPermissionService;
 
+    private SysPermissionConvert sysPermissionConvert;
+
     @ApiOperation(value = "获取所有权限")
     @SaCheckPermission("sys:permission:get")
     @GetMapping("")
     public Result<List<SysPermissionVO>> list() {
-        return Result.success(SysPermissionConvert.INSTANCE.toVOList(sysPermissionService.list()));
+        return Result.success(sysPermissionConvert.toVOList(sysPermissionService.list()));
     }
 
 }

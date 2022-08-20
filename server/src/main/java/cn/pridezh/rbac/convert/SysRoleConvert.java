@@ -6,7 +6,6 @@ import cn.pridezh.rbac.domain.po.SysRole;
 import cn.pridezh.rbac.domain.vo.role.SysRoleItemVO;
 import cn.pridezh.rbac.domain.vo.role.SysRoleVO;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
@@ -14,10 +13,8 @@ import java.util.List;
  * @author PrideZH
  * @since 2022/8/3 21:10
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface SysRoleConvert {
-
-    SysRoleConvert INSTANCE = Mappers.getMapper(SysRoleConvert.class);
 
     SysRole toPO(SysRoleCreateDTO sysRoleCreateDTO);
 
@@ -26,7 +23,5 @@ public interface SysRoleConvert {
     List<SysRoleVO> toVOList(List<SysRole> sysRoles);
 
     SysRoleItemVO toItemVO(SysRole sysRole);
-
-    List<SysRoleItemVO> toItemVOList(List<SysRole> sysRoles);
 
 }

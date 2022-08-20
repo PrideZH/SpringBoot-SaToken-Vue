@@ -6,18 +6,13 @@ import cn.pridezh.rbac.domain.po.SysUser;
 import cn.pridezh.rbac.domain.vo.user.SysUserInfoVO;
 import cn.pridezh.rbac.domain.vo.user.SysUserItemVO;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
-
-import java.util.List;
 
 /**
  * @author PrideZH
  * @since 2022/8/3 20:58
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface SysUserConvert {
-
-    SysUserConvert INSTANCE = Mappers.getMapper(SysUserConvert.class);
 
     SysUser toPO(SysUserCreateDTO sysUserCreateDTO);
 
@@ -26,7 +21,5 @@ public interface SysUserConvert {
     SysUserInfoVO toVO(SysUser sysUser);
 
     SysUserItemVO toItemVO(SysUser sysUser);
-
-    List<SysUserItemVO> toItemVOList(List<SysUser> sysUsers);
 
 }

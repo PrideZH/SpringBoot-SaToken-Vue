@@ -28,6 +28,8 @@ public class ArticleController {
 
     private ArticleService articleService;
 
+    private ArticleConvert articleConvert;
+
     @ApiOperation(value = "创建文章")
     @SaCheckPermission("article:add")
     @PostMapping("")
@@ -43,7 +45,7 @@ public class ArticleController {
     @GetMapping("/page")
     public Result<IPage<ArticleItemVO>> listByPage(@Validated PageDTO pageDTO) {
         Page<Article> page = articleService.page(new Page<>(pageDTO.getPage(), pageDTO.getSize()));
-        return Result.success(page.convert(ArticleConvert.INSTANCE::toItemVO));
+        return Result.success(page.convert(articleConvert::toItemVO));
     }
 
     @ApiOperation(value = "修改文章")
