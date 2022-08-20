@@ -41,7 +41,7 @@ const menuWidth = computed(() => {
               <el-icon v-if="menuItem.meta?.icon"><svg viewBox="0 0 1024 1024" >
                 <path v-for="(iconSvg, index) in menuItem.meta?.icon" :key="index" fill="currentColor" :d="iconSvg"></path>
               </svg></el-icon>
-              <span>{{ $t(subMenu.meta?.locale as string) }}</span>
+              <span>{{ $t(menuItem.meta?.locale as string) }}</span>
             </el-menu-item>
           </el-sub-menu>
           <el-menu-item v-else :index="`/${subMenu.path}`">

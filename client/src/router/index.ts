@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, Router, RouteRecordRaw } from 'vue-router';
 
 import IndexLayout from '@/layout/IndexLayout/index.vue';
-import appRoutes from './modules';
+import menuRoutes from './modules';
 import { useUserStore } from '@/store';
 import { UserInfoResp } from '@/api/auth';
 import { isLogin } from '@/utils/auth';
@@ -19,7 +19,17 @@ const routes: Array<RouteRecordRaw> = [
     name: "root",
     path: "/",
     component: IndexLayout,
-    children: appRoutes,
+    children: menuRoutes
+  },
+  {
+    path: "/",
+    component: IndexLayout,
+    children: [
+      {
+        path: 'account',
+        component: () => import('@/views/account/index.vue'),
+      }
+    ]
   },
   {
     path: '/error',

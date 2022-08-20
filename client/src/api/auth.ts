@@ -20,6 +20,7 @@ export interface UserResp extends BaseResp {
 export interface UserInfoResp extends BaseResp {
   username: string;
   nickname: string;
+  avatarUrl: string;
   superAdmin: string;
   permissions: string[];
 }

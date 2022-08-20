@@ -18,7 +18,7 @@ const appStore = useAppStore();
   box-sizing: border-box;
 }
 
-body, #app {
+html, body, #app {
   height: 100%;
 }
 </style>

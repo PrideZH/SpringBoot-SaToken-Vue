@@ -3,7 +3,7 @@ import authApi, { UserInfoResp, UserResp } from '@/api/auth';
 import IconBtn from '@/components/IconBtn.vue';
 import router from '@/router';
 import { useAppStore, useUserStore } from '@/store';
-import { Expand, Fold, Location, SwitchButton } from '@element-plus/icons-vue';
+import { CaretBottom, Expand, Fold, Location, SwitchButton, User } from '@element-plus/icons-vue';
 import { onMounted, ref } from 'vue';
 
 const appStore = useAppStore();
@@ -51,12 +51,14 @@ onMounted(async () => {
       </el-dropdown>
       <el-popover trigger="click">
         <template #reference>
-          <div class="author">{{ userInfo?.username || '' }}</div>
+          <div class="author">
+            <div class="author-img"><el-avatar :src="userInfo?.avatarUrl" :size="32"/></div>
+            <el-icon class="author-down"><CaretBottom /></el-icon>
+          </div>
         </template>
-        <div class="nickname">
-          <p>{{ userInfo?.nickname || '' }}</p>
-          <div class="btn-item" @click="logout"><el-icon><SwitchButton /></el-icon>退出</div>
-        </div>
+        <div class="nickname">{{ userInfo?.nickname || '' }}</div>
+        <div class="btn-item" @click="router.push('/account')"><el-icon><User /></el-icon>个人中心</div>
+        <div class="btn-item" @click="logout"><el-icon><SwitchButton /></el-icon>退出</div>
       </el-popover>
     </div>
   </div>
@@ -76,8 +78,29 @@ onMounted(async () => {
 }
 
 .author {
+  display: flex;
+  align-items: baseline;
   margin: 0 32px 0 10px;
   cursor: pointer;
+}
+
+.author-img {
+  padding: 4px;
+}
+
+.author:hover .author-img {
+  background-color: #f5f5f5;
+}
+
+.author-down {
+  margin-left: 8px;
+  font-size: 12px;
+  color: #888;
+}
+
+.nickname {
+  padding: 4px;
+  text-align: center;
 }
 
 .btn-item {

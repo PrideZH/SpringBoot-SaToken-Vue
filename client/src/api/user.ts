@@ -3,15 +3,17 @@ import { Page, BaseResp } from '@/types';
 import { RoleResp } from './role';
 
 export interface UserReq {
-  username: string;
-  password: string;
-  nickname: string;
+  username: string | null;
+  password: string | null;
+  nickname: string | null;
+  avatarUrl: string | null;
   roleIds: string[];
 }
 
 export interface UserResp extends BaseResp {
   username: string;
   nickname: string;
+  avatarUrl: string;
   superAdmin: string;
   roles: RoleResp[];
 }
@@ -31,6 +33,11 @@ const userApi = {
 
   del (id: string) {
     return axios.delete(`/api/sys-user/${id}`);
+  },
+
+  updateAvatar (file: FormData) {
+    return axios.post('/api/sys-user/avatar', file, { headers: { 'Content-Type': 'multipart/form-data' } });
+  
   }
 
 }

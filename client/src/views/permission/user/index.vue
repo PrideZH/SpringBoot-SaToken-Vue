@@ -15,9 +15,10 @@ const dialogStatus = ref<'create' | 'update'>('create');
 const dialogVisible = ref<boolean>(false);
 const tempId = ref<string>('');
 const tempUser = ref<UserReq>({
-  username: '',
-  password: '',
-  nickname: '',
+  username: null,
+  password: null,
+  nickname: null,
+  avatarUrl: null,
   roleIds: []
 });
 
@@ -29,9 +30,10 @@ const getUsers = () => {
 
 const showCreate = () => {
   tempUser.value = {
-    username: '',
-    password: '',
-    nickname: '',
+    username: null,
+    password: null,
+    nickname: null,
+    avatarUrl: null,
     roleIds: []
   };
   dialogStatus.value = 'create';
@@ -42,7 +44,8 @@ const showUpdate = (user: UserResp) => {
   tempId.value = user.id;
   tempUser.value = {
     username: user.username,
-    password: '',
+    password: null,
+    avatarUrl: user.avatarUrl,
     nickname: user.nickname,
     roleIds: user.roles.map(role => role.id)
   };
@@ -98,9 +101,17 @@ onMounted(() => {
     <div class="table-operate">
       <el-button v-if="hasPerm('sys:user:add')" type="success" @click="showCreate">{{ $t('common.add') }}</el-button>
     </div>
+
     <el-table :data="users?.records" size="small">
+      <el-table-column label="用户名" header-align="center">
+        <template #default="scope">
+          <el-space>
+            <el-avatar :src="scope.row.avatarUrl" :size="32"/>
+            <div>{{ scope.row.username }}</div>
+          </el-space>
+        </template>
+      </el-table-column>
       <el-table-column prop="nickname" label="昵称" align="center" />
-      <el-table-column prop="username" label="用户名" align="center" />
       <el-table-column label="角色" align="center">
         <template #default="scope">
           <el-space wrap>
@@ -124,9 +135,13 @@ onMounted(() => {
         </template>
       </el-table-column>
     </el-table>
+    
     <el-pagination
+      layout="total, sizes, prev, pager, next, jumper"
+      small="small"
       v-model:current-page="currentPage"
-      :page-size="pageSize"
+      v-model:page-size="pageSize"
+      :page-sizes="[10, 20, 30, 40]"
       :total="users?.total || 0"
     />
   </el-card>
@@ -159,11 +174,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.table-query {
+.el-table {
   margin-bottom: 16px;
-}
-
-.table-query >>> .el-card__body {
-  padding-bottom: 0;
 }
 </style>

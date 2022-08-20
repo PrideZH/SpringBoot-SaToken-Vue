@@ -113,12 +113,15 @@ onMounted(() => {
         </template>
       </el-table-column>
     </el-table>
+
     <el-pagination
+      layout="total, sizes, prev, pager, next, jumper"
+      small="small"
       v-model:current-page="currentPage"
-      :page-size="pageSize"
+      v-model:page-size="pageSize"
+      :page-sizes="[10, 20, 30, 40]"
       :total="roles?.total || 0"
-    >
-    </el-pagination>
+    />
   </el-card>
 
   <el-dialog v-model="dialogVisible" :title="dialogStatus === 'create' ? '创建角色' : '编辑'">
@@ -140,11 +143,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.table-query {
+.el-table {
   margin-bottom: 16px;
-}
-
-.table-query >>> .el-card__body {
-  padding-bottom: 0;
 }
 </style>
