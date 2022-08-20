@@ -1,4 +1,4 @@
-package cn.pridezh.rbac.service;
+package cn.pridezh.rbac.manager;
 
 import cn.hutool.crypto.digest.DigestUtil;
 import io.minio.*;
@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Slf4j
 @Service
-public class MinioService {
+public class MinioManager {
 
     @Value("${minio.bucket}")
     private String bucket;

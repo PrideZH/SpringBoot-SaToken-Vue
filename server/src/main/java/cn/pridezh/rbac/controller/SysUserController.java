@@ -1,5 +1,6 @@
 package cn.pridezh.rbac.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.pridezh.rbac.domain.common.Result;
 import cn.pridezh.rbac.domain.dto.PageDTO;
@@ -13,8 +14,12 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author PrideZH
@@ -70,6 +75,18 @@ public class SysUserController {
     public Result<Void> delete(@PathVariable("id") String id) {
         sysUserService.deleteById(Long.valueOf(id));
         return Result.success(null);
+    }
+
+    @ApiOperation("上传用户头像")
+    @ApiResponses({
+            @ApiResponse(code = 1001, message = "不能修改管理员头像"),
+            @ApiResponse(code = 1002, message = "图片类型错误"),
+            @ApiResponse(code = 1003, message = "图片大小超过500KB")
+    })
+    @SaCheckLogin
+    @PostMapping(value = "/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Result<String> postAvatar(@NotNull(message = "缺少 file") MultipartFile file) throws Exception {
+        return Result.success(sysUserService.updateAvatar(file));
     }
 
 }

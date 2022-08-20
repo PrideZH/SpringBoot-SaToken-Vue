@@ -1,6 +1,7 @@
-package cn.pridezh.rbac.service;
+package cn.pridezh.rbac.manager;
 
 import cn.dev33.satoken.stp.StpInterface;
+import cn.pridezh.rbac.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -11,6 +11,7 @@ import cn.pridezh.rbac.domain.dto.SysUserUpdateDTO;
 import cn.pridezh.rbac.domain.po.*;
 import cn.pridezh.rbac.domain.vo.user.SysUserItemVO;
 import cn.pridezh.rbac.exception.ServiceException;
+import cn.pridezh.rbac.manager.MinioManager;
 import cn.pridezh.rbac.mapper.SysRoleMapper;
 import cn.pridezh.rbac.mapper.SysUserMapper;
 import cn.pridezh.rbac.mapper.SysUserRoleMapper;
@@ -19,8 +20,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.AllArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,9 +36,15 @@ import java.util.List;
 @Service
 public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
 
+    private static final List<String> ALLOW_IMAGE_TYPE = List.of("image/jpeg", "image/png");
+    
+    private Environment environment;
+
     private SysUserMapper sysUserMapper;
     private SysRoleMapper sysRoleMapper;
     private SysUserRoleMapper sysUserRoleMapper;
+
+    private MinioManager minioManager;
 
     private SysUserConvert sysUserConvert;
     private SysRoleConvert sysRoleConvert;
@@ -124,4 +133,25 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
         sysUserRoleMapper.deleteById(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId, id));
     }
 
+    public String updateAvatar(MultipartFile file) throws Exception {
+        Long userId = StpUtil.getLoginIdAsLong();
+        SysUser sysUser = sysUserMapper.selectById(userId);
+
+        if (sysUser.getSuperAdmin()) {
+            throw new ServiceException(1001, "不能修改超级管理员头像");
+        }
+
+        if (!ALLOW_IMAGE_TYPE.contains(file.getContentType())) {
+            throw new ServiceException(1002, "图片类型错误");
+        }
+        if (file.getSize() >= 500 * 1024) {
+            throw new ServiceException(1003, "图片大小超过500KB");
+        }
+
+        String avatarUrl = minioManager.putObject(file);
+
+        sysUserMapper.updateById(sysUser.setAvatarUrl(avatarUrl));
+
+        return environment.getProperty("minio.url") + "/" + environment.getProperty("minio.bucket") + "/" + avatarUrl;
+    }
 }
