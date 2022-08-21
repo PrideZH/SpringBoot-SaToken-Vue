@@ -11,10 +11,6 @@ const userStore = useUserStore();
 
 const userInfo = ref<UserInfoResp | null>(null);
 
-const toggleCollapse = (): void => {
-  appStore.isCollapse = !appStore.isCollapse;
-};
-
 const logout = () => {
   authApi.logout().then(res => {
     localStorage.removeItem('token');
@@ -31,7 +27,7 @@ onMounted(async () => {
 <template>
   <div class="header">
     <div class="left">
-      <IconBtn style="height: 40px;" @click="toggleCollapse">
+      <IconBtn style="height: 40px;" @click="appStore.toggleCollapse()">
         <el-icon :size="24">
           <Expand v-if="appStore.isCollapse" />
           <Fold v-else />

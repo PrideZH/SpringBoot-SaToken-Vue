@@ -93,16 +93,16 @@ onMounted(() => {
     </div>
     <el-table :data="roles?.records" size="small">
       <el-table-column prop="name" label="名称" align="center" />
-      <el-table-column prop="permission" label="权限" align="center">
+      <el-table-column prop="permission" label="权限" align="center" min-width="172">
         <template #default="scope">
           <el-space wrap>
             <el-tag v-for="permission in scope.row.permissions">{{ permission.name }}</el-tag>
           </el-space>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" align="center" width="140"/>
-      <el-table-column prop="updateTime" label="修改时间" align="center" width="140"/>
-      <el-table-column fixed="right" label="操作" align="center" width="128">
+      <el-table-column prop="createTime" label="创建时间" align="center" min-width="140"/>
+      <el-table-column prop="updateTime" label="修改时间" align="center" min-width="140"/>
+      <el-table-column fixed="right" label="操作" align="center" min-width="128">
         <template #default="scope">
           <el-button v-if="hasPerm('sys:role:put')" type="primary" size="small" @click="showUpdate(scope.row)">{{ $t('common.edit') }}</el-button>
           <el-popconfirm title="是否确定删除?" @confirm="deleteRole(scope.row.id)">

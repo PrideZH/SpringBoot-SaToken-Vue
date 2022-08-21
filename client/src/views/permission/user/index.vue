@@ -103,7 +103,7 @@ onMounted(() => {
     </div>
 
     <el-table :data="users?.records" size="small">
-      <el-table-column label="用户名" header-align="center">
+      <el-table-column label="用户名" header-align="center" min-width="128">
         <template #default="scope">
           <el-space>
             <el-avatar :src="scope.row.avatarUrl" :size="32"/>
@@ -122,9 +122,9 @@ onMounted(() => {
           </el-space>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" align="center" width="140"/>
-      <el-table-column prop="updateTime" label="修改时间" align="center" width="140"/>
-      <el-table-column fixed="right" label="操作" align="center" width="128">
+      <el-table-column prop="createTime" label="创建时间" align="center" min-width="140"/>
+      <el-table-column prop="updateTime" label="修改时间" align="center" min-width="140"/>
+      <el-table-column fixed="right" label="操作" align="center" min-width="128">
         <template #default="scope">
           <el-button v-if="!scope.row.superAdmin && hasPerm('sys:user:put')" type="primary" size="small" @click="showUpdate(scope.row)">{{ $t('common.edit') }}</el-button>
           <el-popconfirm v-if="!scope.row.superAdmin && hasPerm('sys:user:del')" title="是否确定删除?" @confirm="deleteUser(scope.row.id)">

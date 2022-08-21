@@ -37,7 +37,6 @@ const userApi = {
 
   updateAvatar (file: FormData) {
     return axios.post('/api/sys-user/avatar', file, { headers: { 'Content-Type': 'multipart/form-data' } });
-  
   }
 
 }

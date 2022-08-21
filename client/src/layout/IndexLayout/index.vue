@@ -10,13 +10,21 @@ const rootRoute: RouteRecordNormalized = router.getRoutes().find((el) => el.name
 const appStore = useAppStore();
 const isCollapse = computed(() => appStore.isCollapse);
 const menuWidth = computed(() => {
-  return appStore.isCollapse ? 64 : 200;
+  return appStore.isCollapse ? (appStore.isMobile ? 0 : 64) : 200;
 });
+
+const clickMenuItem = (route: string) => {
+  router.push(route);
+  if (appStore.isMobile) {
+    appStore.isCollapse = true;
+  }
+}
 </script>
 
 <template>
-  <el-container class="container">
-    <el-aside class="aside" :width="menuWidth + 'px'">
+  <div class="container">
+    <div class="masking" v-if="appStore.isMobile" v-show="!appStore.isCollapse" @click="appStore.isCollapse = true"/>
+    <el-aside :class="[ 'aside', { 'aside-mobile': appStore.isMobile } ]" :width="menuWidth + 'px'">
       <div class="logo">
         <img src="/favicon.ico" />
         <span v-if="!isCollapse" style="flex-shrink: 0; margin-left: 8px;">Admin</span>
@@ -26,7 +34,6 @@ const menuWidth = computed(() => {
         background-color="#222832"
         text-color="#fff"
         :collapse="isCollapse"
-        :router="true"
         :collapse-transition="false"
       >
         <template v-for="subMenu in rootRoute.children">
@@ -37,14 +44,14 @@ const menuWidth = computed(() => {
               </svg></el-icon>
               <span>{{ $t(subMenu.meta?.locale as string) }}</span>
             </template>
-            <el-menu-item v-for="menuItem in subMenu.children" :key="menuItem.path" :index="`/${subMenu.path}/${menuItem.path}`">
+            <el-menu-item v-for="menuItem in subMenu.children" :key="menuItem.path" :index="`/${subMenu.path}/${menuItem.path}`" @click="clickMenuItem(`/${subMenu.path}/${menuItem.path}`)">
               <el-icon v-if="menuItem.meta?.icon"><svg viewBox="0 0 1024 1024" >
                 <path v-for="(iconSvg, index) in menuItem.meta?.icon" :key="index" fill="currentColor" :d="iconSvg"></path>
               </svg></el-icon>
               <span>{{ $t(menuItem.meta?.locale as string) }}</span>
             </el-menu-item>
           </el-sub-menu>
-          <el-menu-item v-else :index="`/${subMenu.path}`">
+          <el-menu-item v-else :index="`/${subMenu.path}`" @click="clickMenuItem(`/${subMenu.path}`)">
             <el-icon v-if="subMenu.meta?.icon"><svg viewBox="0 0 1024 1024" >
               <path v-for="(iconSvg, index) in subMenu.meta?.icon" :key="index" fill="currentColor" :d="iconSvg"></path>
             </svg></el-icon>
@@ -53,11 +60,11 @@ const menuWidth = computed(() => {
         </template>
       </el-menu>
     </el-aside>
-    <el-container class="content">
+    <div class="content" :style="{ marginLeft: appStore.isMobile ? 0 : menuWidth + 'px' }">
       <el-header class="header"><Header /></el-header>
       <el-main><router-view /></el-main>
-    </el-container>
-  </el-container>
+    </div>
+  </div>
 </template>
 
 <style>
@@ -81,20 +88,38 @@ const menuWidth = computed(() => {
 }
 
 .container {
-  height: 100vh;
+  height: 100%;
+}
+
+.masking {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: .3;
+  top: 0;
+  position: absolute;
+  z-index: 64;
 }
 
 .aside {
+  position: fixed;
+  height: 100%;
   background-color: #222832;
   overflow: hidden;
   overflow-y: auto;
   -ms-overflow-style: none;
   overflow: -moz-scrollbars-none;
   transition: width 0.5s;
+  z-index: 128;
+}
+
+.aside-mobile {
+  position: absolute;
 }
 
 .content {
   min-width: 512px;
+  transition: margin 0.5s;
 }
 
 .header {
